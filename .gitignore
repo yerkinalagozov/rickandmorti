@@ -1,0 +1,52 @@
+# Node
+node_modules/
+**/node_modules/
+**/.parcel-cache/
+**/dist/
+**/build/
+**/.next/
+**/.nuxt/
+**/.vite/
+**/.cache/
+**/coverage/
+
+# Frontend artifacts
+rick-morty-frontend/node_modules/
+rick-morty-frontend/dist/
+rick-morty-frontend/.env
+rick-morty-frontend/.env.*
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+**/bin/
+**/tmp/
+
+# Env files
+.env
+.env.*
+
+# Docker
+**/*.tar
+**/.docker/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs
+*.log
+**/logs/
+
+# Misc
+*.local
