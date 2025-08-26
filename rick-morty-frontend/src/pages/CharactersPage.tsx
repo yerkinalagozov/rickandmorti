@@ -78,7 +78,7 @@ export function CharactersPage() {
       const res = await apiClient.axios.get('/characters', { params: filters })
       return res.data
     },
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   })
 
   const items = useMemo(() => (data?.data ?? data?.results ?? [] as any[]), [data])
