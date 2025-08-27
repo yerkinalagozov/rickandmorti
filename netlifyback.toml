@@ -1,0 +1,35 @@
+# Netlify configuration for Rick & Morty backend (Go)
+# NOTE: Netlify does not run long-lived Go servers. This file is intended to:
+#  - Build the backend binary during CI (artifact ends up in rick-morty-backend/bin)
+#  - Optionally document/provide proxy redirects if you want Netlify to forward
+#    /api/* requests to an externally hosted backend (Render/Railway/Fly.io/etc.).
+# Keep netlify.toml for the frontend. This file is backend-specific.
+
+[build]
+  base    = "rick-morty-backend"
+  publish = "rick-morty-backend/bin"   # build artifacts directory
+  command = "make build"               # uses Makefile to build bin/rick-morty-api
+
+  [build.environment]
+    GO_VERSION = "1.22"
+    # Backend listens on ADDR env (default :8080) when you run the binary/container.
+    # Example: ADDR=":8080"
+
+# --- Optional: Use Netlify as a reverse proxy to an externally hosted backend ---
+# If your backend is deployed elsewhere (e.g., Render) you can forward /api/* from
+# the Netlify site to that backend. It's better to keep the target in Netlify UI env
+# vars and not hardcode it, but TOML requires literal values. So treat these as examples.
+
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://your-backend-host.example.com/api/v1/:splat"
+#   status = 200
+#   force = true
+#
+# [[redirects]]
+#   from = "/api/v1/health"
+#   to = "https://your-backend-host.example.com/api/v1/health"
+#   status = 200
+#   force = true
+
+# No SPA fallback here because this is the backend configuration file.

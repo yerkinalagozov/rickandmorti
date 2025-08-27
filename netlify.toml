@@ -1,0 +1,33 @@
+# Netlify configuration for Rick & Morty frontend
+# This file lives in the repository root as requested.
+
+[build]
+  base    = "rick-morty-frontend"
+  publish = "rick-morty-frontend/dist"
+  command = "npm ci && npm run build"
+
+  [build.environment]
+    NODE_VERSION = "18"
+    # Configure your API base URL in Netlify UI as VITE_API_BASE_URL
+    # Example for backend proxy host:
+    # VITE_API_BASE_URL = "https://your-backend-host.example.com/api/v1"
+
+# Single Page App fallback so client-side routes work on refresh and deep links
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Optional static asset caching for Vite build outputs
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# If you prefer Netlify to proxy API instead of using VITE_API_BASE_URL,
+# you can uncomment and set the target below. Note: hardcoding is discouraged.
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://your-backend-host.example.com/api/v1/:splat"
+#   status = 200
+#   force = true

@@ -1,22 +1,22 @@
 import React, { useState, useCallback } from 'react'
-import { CharacterList } from '../components/characters/CharacterList'
-import { CharacterFiltersComponent } from '../components/characters/CharacterFilters'
+import { LocationList } from '../components/locations/LocationList'
+import { LocationFiltersComponent } from '../components/locations/LocationFilters'
 import { Pagination } from '../components/common/UI/Pagination'
-import { useCharacters } from '../hooks/useCharacters'
+import { useLocations } from '../hooks/useLocations'
 import { useDebounce } from '../hooks/useDebounce'
-import type { CharacterFilters } from '../types/character'
+import type { LocationFilters } from '../types/location'
 
-const CharactersPage: React.FC = () => {
-  const [filters, setFilters] = useState<CharacterFilters>({
+const LocationsPage: React.FC = () => {
+  const [filters, setFilters] = useState<LocationFilters>({
     page: 1
   })
 
   // Debounce search to avoid excessive API calls
   const debouncedFilters = useDebounce(filters, 500)
   
-  const { data, isLoading, error } = useCharacters(debouncedFilters)
+  const { data, isLoading, error } = useLocations(debouncedFilters)
 
-  const handleFiltersChange = useCallback((newFilters: CharacterFilters) => {
+  const handleFiltersChange = useCallback((newFilters: LocationFilters) => {
     setFilters(newFilters)
   }, [])
 
@@ -28,7 +28,7 @@ const CharactersPage: React.FC = () => {
     setFilters({ page: 1 })
   }, [])
 
-  const characters = data?.results || []
+  const locations = data?.results || []
   const currentPage = debouncedFilters.page || 1
   const totalPages = data?.info.pages || 1
   const totalCount = data?.info.count || 0
@@ -38,22 +38,22 @@ const CharactersPage: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[rgb(var(--color-text))] glitch-text">
-            Characters
+            Locations
           </h1>
           <p className="text-[rgb(var(--color-text-secondary))] mt-1">
-            Discover {totalCount} characters from across the multiverse
+            Explore {totalCount} locations across infinite realities
           </p>
         </div>
       </div>
 
-      <CharacterFiltersComponent
+      <LocationFiltersComponent
         filters={filters}
         onChange={handleFiltersChange}
         onReset={handleResetFilters}
       />
 
-      <CharacterList
-        characters={characters}
+      <LocationList
+        locations={locations}
         loading={isLoading}
         error={error?.message}
       />
@@ -71,4 +71,4 @@ const CharactersPage: React.FC = () => {
   )
 }
 
-export default CharactersPage
+export default LocationsPage

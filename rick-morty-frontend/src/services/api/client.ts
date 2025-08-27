@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 import { toast } from 'react-hot-toast'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'
+const API_BASE_URL = 'https://rickandmortyapi.com/api'
 
 class ApiClient {
   private client: AxiosInstance
@@ -58,6 +58,16 @@ class ApiClient {
   }
 
   get axios() { return this.client }
+
+  // Client-side validation methods
+  async validateFilters(filters: Record<string, any>) {
+    if (filters.status && !['alive', 'dead', 'unknown'].includes(filters.status)) {
+      throw new Error('Invalid status; must be one of: alive, dead, unknown')
+    }
+    if (filters.gender && !['female', 'male', 'genderless', 'unknown'].includes(filters.gender)) {
+      throw new Error('Invalid gender; must be one of: female, male, genderless, unknown')
+    }
+  }
 }
 
 export const apiClient = new ApiClient()

@@ -1,123 +1,127 @@
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useSearchParams, Link } from 'react-router-dom'
-import { apiClient } from '@/services/api/client'
+import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { SearchBar } from '../components/common/Search/SearchBar'
+import { SearchFilters, type SearchEntity } from '../components/common/Search/SearchFilters'
+import { SearchResults } from '../components/common/Search/SearchResults'
+import { useSearch } from '../hooks/useSearch'
+import { useSearchStore } from '../store/useSearchStore'
+import { useDebounce } from '../hooks/useDebounce'
 
-const ENTITIES = ['characters', 'episodes', 'locations'] as const
+const SearchPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { 
+    query: storeQuery, 
+    entity: storeEntity, 
+    setQuery: setStoreQuery, 
+    setEntity: setStoreEntity,
+    addRecentSearch,
+    recentSearches,
+    clearRecentSearches
+  } = useSearchStore()
 
-type Entity = typeof ENTITIES[number]
+  // Initialize from URL params or store
+  const [query, setQuery] = useState(searchParams.get('q') || storeQuery)
+  const [entity, setEntity] = useState<SearchEntity>(
+    (searchParams.get('entity') as SearchEntity) || storeEntity
+  )
 
-export function SearchPage() {
-  const [params, setParams] = useSearchParams()
-  const q = params.get('q') || ''
-  const entity = (params.get('entity') as Entity) || 'characters'
+  // Debounce query to avoid excessive API calls during typing
+  const debouncedQuery = useDebounce(query, 300)
+  
+  const { data, isLoading, error } = useSearch(entity, debouncedQuery)
 
-  const setEntity = (e: Entity) => {
-    const next = new URLSearchParams(params)
-    next.set('entity', e)
-    setParams(next, { replace: true })
+  // Update URL and store when query/entity changes
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (debouncedQuery.trim()) params.set('q', debouncedQuery.trim())
+    if (entity !== 'characters') params.set('entity', entity)
+    
+    setSearchParams(params, { replace: true })
+    setStoreQuery(debouncedQuery)
+    setStoreEntity(entity)
+  }, [debouncedQuery, entity, setSearchParams, setStoreQuery, setStoreEntity])
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      addRecentSearch(query.trim())
+    }
   }
 
-  const setQuery = (value: string) => {
-    const next = new URLSearchParams(params)
-    if (value) next.set('q', value)
-    else next.delete('q')
-    setParams(next, { replace: true })
+  const handleEntityChange = (newEntity: SearchEntity) => {
+    setEntity(newEntity)
   }
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['search', entity, q],
-    queryFn: async () => {
-      const endpoint = entity === 'characters' ? '/characters' : entity === 'episodes' ? '/episodes' : '/locations'
-      const res = await apiClient.axios.get(endpoint, { params: { name: q || undefined, page: 1 } })
-      return res.data
-    },
-    enabled: true,
-  })
+  const handleRecentSearchClick = (recentQuery: string) => {
+    setQuery(recentQuery)
+    addRecentSearch(recentQuery)
+  }
 
-  const items: any[] = useMemo(() => (data?.results || data?.data || []), [data])
+  const results = data?.results || []
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <input
-          value={q}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by name..."
-          className="w-full md:w-1/2 bg-foreground text-text rounded px-3 py-2 border border-border focus:outline-none focus:ring-2 focus:ring-accent"
-        />
-        <EntityTabs value={entity} onChange={setEntity} />
+      <div>
+        <h1 className="text-3xl font-bold text-[rgb(var(--color-text))] glitch-text mb-2">
+          Multiverse Search
+        </h1>
+        <p className="text-[rgb(var(--color-text-secondary))]">
+          Search across characters, episodes, and locations from infinite realities
+        </p>
       </div>
 
-      {isLoading && <div className="portal-loader mx-auto" />}
-      {isError && <p className="text-red-500">Failed to load results</p>}
-      {!isLoading && !isError && items.length === 0 && (
-        <p className="text-textSecondary">No results found. Try another query.</p>
+      <div className="space-y-4">
+        <SearchBar
+          query={query}
+          onQueryChange={setQuery}
+          onSearch={handleSearch}
+          loading={isLoading}
+        />
+        
+        <div className="flex items-center justify-between">
+          <SearchFilters
+            selectedEntity={entity}
+            onEntityChange={handleEntityChange}
+          />
+        </div>
+      </div>
+
+      {/* Recent Searches */}
+      {recentSearches.length > 0 && !debouncedQuery.trim() && (
+        <div className="bg-[rgb(var(--color-foreground))] border border-[rgb(var(--color-border))] rounded-lg p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-[rgb(var(--color-text))]">
+              Recent Searches
+            </h3>
+            <button
+              onClick={clearRecentSearches}
+              className="text-xs text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text))] transition-colors"
+            >
+              Clear all
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {recentSearches.map((recentQuery, index) => (
+              <button
+                key={index}
+                onClick={() => handleRecentSearchClick(recentQuery)}
+                className="px-3 py-1 text-sm bg-[rgb(var(--color-background))] border border-[rgb(var(--color-border))] rounded-full hover:border-[rgb(var(--color-primary))] transition-colors"
+              >
+                {recentQuery}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
-      {!isLoading && !isError && items.length > 0 && (
-        <ResultsGrid entity={entity} items={items} />)
-      }
-
-      <p className="text-sm text-textSecondary">
-        Tip: You can share search with a link. For example: <Link to={`/search?entity=${entity}&q=rick`} className="underline">/search?entity={entity}&q=rick</Link>
-      </p>
+      <SearchResults
+        results={results}
+        entity={entity}
+        loading={isLoading}
+        error={error?.message}
+        query={debouncedQuery}
+      />
     </div>
   )
 }
 
-function EntityTabs({ value, onChange }: { value: Entity, onChange: (e: Entity) => void }) {
-  return (
-    <div className="inline-flex bg-foreground rounded-md p-1 border border-border">
-      {ENTITIES.map(e => (
-        <button
-          key={e}
-          onClick={() => onChange(e)}
-          className={`px-3 py-1 rounded ${value === e ? 'bg-accent text-white' : 'hover:bg-muted'}`}
-        >
-          {e.charAt(0).toUpperCase() + e.slice(1)}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function ResultsGrid({ entity, items }: { entity: Entity, items: any[] }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {items.map((it: any) => (
-        <Card key={it.id} entity={entity} item={it} />
-      ))}
-    </div>
-  )
-}
-
-function Card({ entity, item }: { entity: Entity, item: any }) {
-  if (entity === 'characters') {
-    return (
-      <Link to={`/characters/${item.id}`} className="bg-foreground rounded shadow p-3 block hover:bg-muted">
-        <img src={item.image} alt={item.name} className="rounded mb-2" />
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-textSecondary">{item.status} • {item.species}</p>
-        <p className="text-sm text-textSecondary">Location: {item.location?.name}</p>
-      </Link>
-    )
-  }
-  if (entity === 'episodes') {
-    return (
-      <div className="bg-foreground rounded shadow p-3">
-        <h3 className="font-semibold mb-1">{item.name}</h3>
-        <p className="text-sm text-textSecondary">Code: {item.episode}</p>
-        <p className="text-sm text-textSecondary">Air date: {item.air_date}</p>
-      </div>
-    )
-  }
-  // locations
-  return (
-    <div className="bg-foreground rounded shadow p-3">
-      <h3 className="font-semibold mb-1">{item.name}</h3>
-      <p className="text-sm text-textSecondary">Type: {item.type}</p>
-      <p className="text-sm text-textSecondary">Dimension: {item.dimension}</p>
-    </div>
-  )
-}
+export default SearchPage

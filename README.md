@@ -158,3 +158,4 @@ docker compose up --build
 1) Back: `cd rick-morty-backend && make run`
 2) Front: `cd rick-morty-frontend && cp .env.example .env && npm ci && npm run dev`
 Откройте http://localhost:7878 — раздел Characters должен отображать список персонажей. Также доступна страница Search (/search) для поиска по персонажам, эпизодам и локациям.
+
