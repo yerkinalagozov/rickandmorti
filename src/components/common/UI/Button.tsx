@@ -27,10 +27,10 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2'
   
   const variantClasses = {
-    primary: 'bg-[rgb(var(--color-primary))] text-white hover:bg-[rgb(var(--color-primary))]/90 focus:ring-[rgb(var(--color-primary))]',
-    secondary: 'bg-[rgb(var(--color-secondary))] text-white hover:bg-[rgb(var(--color-secondary))]/90 focus:ring-[rgb(var(--color-secondary))]',
-    outline: 'border border-[rgb(var(--color-border))] bg-transparent hover:bg-[rgb(var(--color-foreground))] text-[rgb(var(--color-text))]',
-    ghost: 'bg-transparent hover:bg-[rgb(var(--color-border))] text-[rgb(var(--color-text))]',
+    primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-primary shadow-glow',
+    secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary',
+    outline: 'border border-border bg-transparent hover:bg-foreground text-text hover:shadow-md',
+    ghost: 'bg-transparent hover:bg-border text-text',
     neon: 'neon-button'
   }
   

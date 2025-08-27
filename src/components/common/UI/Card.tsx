@@ -17,14 +17,11 @@ export const Card: React.FC<CardProps> = ({
   return (
     <motion.div
       className={`
-        bg-[rgb(var(--color-foreground))] 
-        border border-[rgb(var(--color-border))] 
-        rounded-lg shadow-md overflow-hidden
-        ${hover ? 'hover:shadow-lg transition-all duration-300' : ''}
+        character-card
         ${onClick ? 'cursor-pointer' : ''}
         ${className}
       `}
-      whileHover={hover ? { y: -4, boxShadow: 'var(--shadow-glow)' } : {}}
+      whileHover={hover ? { y: -4 } : {}}
       whileTap={onClick ? { scale: 0.98 } : {}}
       onClick={onClick}
     >

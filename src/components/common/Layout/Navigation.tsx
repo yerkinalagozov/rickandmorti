@@ -22,10 +22,10 @@ export const Navigation: React.FC = () => {
             key={path}
             to={path}
             className={`
-              px-3 py-2 rounded-md text-sm font-medium transition-colors
+              px-3 py-2 rounded-md text-sm font-medium transition-all duration-300
               ${isActive
-                ? 'text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary))]/10'
-                : 'text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text))] hover:bg-[rgb(var(--color-border))]'
+                ? 'text-primary bg-primary/10 shadow-glow'
+                : 'text-textSecondary hover:text-secondary hover:bg-border hover:shadow-md'
               }
             `}
           >

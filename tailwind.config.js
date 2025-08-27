@@ -16,12 +16,23 @@ export default {
         text: 'rgb(var(--color-text))',
         textSecondary: 'rgb(var(--color-text-secondary))',
         border: 'rgb(var(--color-border))',
+        // Rick & Morty specific colors
+        purple: 'rgb(var(--color-purple))',
+        pink: 'rgb(var(--color-pink))',
+        orange: 'rgb(var(--color-orange))',
+        error: 'rgb(var(--color-error))',
+        success: 'rgb(var(--color-success))',
+        warning: 'rgb(var(--color-warning))',
       },
       boxShadow: {
         sm: 'var(--shadow-sm)',
         md: 'var(--shadow-md)',
         lg: 'var(--shadow-lg)',
-        glow: 'var(--shadow-glow)'
+        glow: 'var(--shadow-glow)',
+        portal: 'var(--shadow-portal)'
+      },
+      fontFamily: {
+        orbitron: ['Orbitron', 'monospace'],
       }
     },
   },

@@ -4,36 +4,53 @@
 @tailwind utilities;
 
 :root {
-  /* Light Theme */
-  --color-background: 240 244 248;
-  --color-foreground: 255 255 255;
-  --color-primary: 151 206 76;
-  --color-secondary: 68 187 164;
-  --color-accent: 240 225 74;
-  --color-text: 26 26 46;
-  --color-text-secondary: 107 114 128;
-  --color-border: 229 231 235;
-  --color-error: 239 68 68;
-  --color-success: 34 197 94;
-  --color-warning: 251 146 60;
+  /* Light Theme - Rick & Morty Inspired */
+  --color-background: 245 248 255;        /* Soft lab white */
+  --color-foreground: 255 255 255;        /* Pure white cards */
+  --color-primary: 151 206 76;            /* Portal Green (Rick's signature) */
+  --color-secondary: 0 212 255;           /* Science Blue (gadgets) */
+  --color-accent: 240 225 74;             /* Energy Yellow */
+  --color-text: 32 35 51;                 /* Dark blue-gray */
+  --color-text-secondary: 89 96 120;      /* Medium blue-gray */
+  --color-border: 220 228 242;            /* Light blue border */
+  --color-error: 255 107 157;             /* Pink error (Morty anxiety) */
+  --color-success: 151 206 76;            /* Portal green success */
+  --color-warning: 240 225 74;            /* Energy yellow warning */
+  --color-purple: 155 89 182;             /* Space purple */
+  --color-pink: 255 107 157;              /* Morty pink */
+  --color-orange: 255 159 67;             /* Dimension orange */
   
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px rgba(151, 206, 76, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgb(151 206 76 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(151 206 76 / 0.15);
+  --shadow-lg: 0 10px 15px -3px rgb(151 206 76 / 0.2);
+  --shadow-glow: 0 0 20px rgba(151, 206, 76, 0.4);
+  --shadow-portal: 0 0 30px rgba(151, 206, 76, 0.6), 0 0 60px rgba(0, 212, 255, 0.3);
 }
 
 [data-theme="dark"] {
-  --color-background: 12 12 12;
-  --color-foreground: 26 26 46;
-  --color-primary: 151 206 76;
-  --color-secondary: 240 225 74;
-  --color-accent: 68 187 164;
-  --color-text: 240 244 248;
-  --color-text-secondary: 156 163 175;
-  --color-border: 55 65 81;
-  --shadow-glow: 0 0 30px rgba(151, 206, 76, 0.8);
+  /* Dark Theme - Rick's Lab/Space Dimension */
+  --color-background: 15 20 35;            /* Deep space navy */
+  --color-foreground: 25 30 50;            /* Darker lab panels */
+  --color-primary: 151 206 76;             /* Portal Green (brighter in dark) */
+  --color-secondary: 0 212 255;            /* Bright Science Blue */
+  --color-accent: 240 225 74;              /* Electric Yellow */
+  --color-text: 240 245 255;               /* Bright white text */
+  --color-text-secondary: 156 170 195;     /* Muted blue-white */
+  --color-border: 45 55 85;                /* Dark blue border */
+  --color-error: 255 107 157;              /* Bright pink error */
+  --color-success: 151 206 76;             /* Portal green success */
+  --color-warning: 240 225 74;             /* Electric yellow warning */
+  --color-purple: 155 89 182;              /* Space purple */
+  --color-pink: 255 107 157;               /* Morty pink */
+  --color-orange: 255 159 67;              /* Dimension orange */
+  
+  /* Enhanced dark shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  --shadow-glow: 0 0 25px rgba(151, 206, 76, 0.8);
+  --shadow-portal: 0 0 40px rgba(151, 206, 76, 0.9), 0 0 80px rgba(0, 212, 255, 0.6);
 }
 
 * {
@@ -42,13 +59,25 @@
   padding: 0;
 }
 
+html {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth theme transitions for all elements */
+* {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Portal Animation */
@@ -82,40 +111,44 @@ body {
   background: radial-gradient(
     circle at 30% 30%,
     #97CE4C,
-    #44BBA4 25%,
-    transparent 50%
+    #00D4FF 25%,
+    #F0E14A 50%,
+    #9B59B6 75%,
+    transparent 85%
   );
   box-shadow: 
-    0 0 40px #97CE4C,
-    inset 0 0 40px rgba(151, 206, 76, 0.3);
+    0 0 50px #97CE4C,
+    0 0 100px #00D4FF,
+    inset 0 0 40px rgba(151, 206, 76, 0.4),
+    inset 0 0 80px rgba(0, 212, 255, 0.2);
   animation: portal-spin 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 }
 
-/* Glitch Effect */
+/* Rick & Morty Glitch Effect */
 @keyframes glitch {
   0%, 100% {
     text-shadow: 
-      2px 0 #00ff00,
-      -2px 0 #ff00ff,
+      2px 0 #00D4FF,
+      -2px 0 #FF6B9D,
       0 0 10px #97CE4C;
   }
   25% {
     text-shadow: 
-      -2px 0 #00ff00,
-      2px 0 #ff00ff,
-      0 0 15px #44BBA4;
+      -2px 0 #F0E14A,
+      2px 0 #9B59B6,
+      0 0 15px #00D4FF;
   }
   50% {
     text-shadow: 
-      2px 2px #ff00ff,
-      -2px -2px #00ff00,
+      2px 2px #FF6B9D,
+      -2px -2px #97CE4C,
       0 0 20px #F0E14A;
   }
   75% {
     text-shadow: 
-      -2px 2px #00ff00,
-      2px -2px #ff00ff,
-      0 0 15px #97CE4C;
+      -2px 2px #00D4FF,
+      2px -2px #FF6B9D,
+      0 0 15px #9B59B6;
   }
 }
 
@@ -130,11 +163,11 @@ body {
   animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-/* Neon Button */
+/* Rick & Morty Neon Button */
 .neon-button {
   position: relative;
   padding: 12px 24px;
-  background: linear-gradient(45deg, #97CE4C, #44BBA4);
+  background: linear-gradient(45deg, #97CE4C, #00D4FF, #F0E14A);
   border: 2px solid #97CE4C;
   border-radius: 8px;
   color: white;
@@ -145,16 +178,19 @@ body {
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 
-    0 0 20px rgba(151, 206, 76, 0.5),
+    0 0 20px rgba(151, 206, 76, 0.6),
+    0 0 40px rgba(0, 212, 255, 0.3),
     inset 0 0 20px rgba(151, 206, 76, 0.1);
 }
 
 .neon-button:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 0 40px rgba(151, 206, 76, 0.8),
+    0 0 30px rgba(151, 206, 76, 0.9),
+    0 0 60px rgba(0, 212, 255, 0.6),
+    0 0 90px rgba(240, 225, 74, 0.4),
     inset 0 0 30px rgba(151, 206, 76, 0.3),
-    0 10px 40px rgba(151, 206, 76, 0.3);
+    0 10px 40px rgba(151, 206, 76, 0.4);
 }
 
 .neon-button::before {
@@ -172,25 +208,71 @@ body {
   left: 100%;
 }
 
-/* Character Cards */
+/* Rick & Morty Character Cards */
 .character-card {
   @apply bg-[rgb(var(--color-foreground))] rounded-lg shadow-md hover:shadow-lg transition-all duration-300;
   border: 1px solid rgb(var(--color-border));
+  position: relative;
+  overflow: hidden;
+}
+
+.character-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #97CE4C, #00D4FF, #F0E14A, #9B59B6, #FF6B9D);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .character-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-portal);
+}
+
+.character-card:hover::before {
+  opacity: 1;
 }
 
 .status-alive {
-  @apply text-green-500;
+  color: rgb(var(--color-success));
+  text-shadow: 0 0 8px rgba(151, 206, 76, 0.6);
 }
 
 .status-dead {
-  @apply text-red-500;
+  color: rgb(var(--color-error));
+  text-shadow: 0 0 8px rgba(255, 107, 157, 0.6);
 }
 
 .status-unknown {
-  @apply text-gray-500;
+  color: rgb(var(--color-text-secondary));
+  text-shadow: 0 0 8px rgba(156, 170, 195, 0.4);
+}
+
+/* New Rick & Morty specific classes */
+.portal-glow {
+  box-shadow: var(--shadow-portal);
+}
+
+.science-blue {
+  color: rgb(var(--color-secondary));
+}
+
+.energy-yellow {
+  color: rgb(var(--color-accent));
+}
+
+.space-purple {
+  color: rgb(var(--color-purple));
+}
+
+.morty-pink {
+  color: rgb(var(--color-pink));
+}
+
+.dimension-orange {
+  color: rgb(var(--color-orange));
 }

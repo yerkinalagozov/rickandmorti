@@ -23,11 +23,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'alive':
-        return 'text-green-500'
+        return 'status-alive'
       case 'dead':
-        return 'text-red-500'
+        return 'status-dead'
       default:
-        return 'text-gray-500'
+        return 'status-unknown'
     }
   }
 
@@ -61,8 +61,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className={`
               absolute top-2 right-2 p-2 rounded-full
               bg-black/50 hover:bg-black/70 backdrop-blur-sm
-              opacity-0 group-hover:opacity-100 transition-opacity
-              ${isFavorite ? 'text-red-500' : 'text-white'}
+              opacity-0 group-hover:opacity-100 transition-all duration-300
+              ${isFavorite ? 'text-pink shadow-portal' : 'text-white'}
             `}
             onClick={handleFavoriteClick}
           >
@@ -84,11 +84,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         </div>
         
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-[rgb(var(--color-text))] mb-2 line-clamp-1">
+          <h3 className="text-lg font-semibold text-text mb-2 line-clamp-1 group-hover:text-primary transition-colors duration-300">
             {character.name}
           </h3>
           
-          <div className="space-y-1 text-sm text-[rgb(var(--color-text-secondary))]">
+          <div className="space-y-1 text-sm text-textSecondary">
             <p>
               <span className="font-medium">Species:</span> {character.species}
             </p>
@@ -107,12 +107,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
           
           <div className="mt-4 flex items-center justify-between">
-            <span className="text-xs text-[rgb(var(--color-text-secondary))]">
+            <span className="text-xs text-textSecondary group-hover:text-secondary transition-colors duration-300">
               {character.episode.length} episode{character.episode.length !== 1 ? 's' : ''}
             </span>
             
             <motion.div
-              className="text-[rgb(var(--color-primary))] opacity-0 group-hover:opacity-100 transition-opacity"
+              className="text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               whileHover={{ scale: 1.1 }}
             >
               →

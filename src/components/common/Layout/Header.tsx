@@ -1,19 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Navigation } from './Navigation'
-import { Button } from '../UI/Button'
-import { useThemeStore } from '../../../store/useThemeStore'
+import { ThemeToggle } from '../UI/ThemeToggle'
 
 export const Header: React.FC = () => {
-  const { theme, toggleTheme } = useThemeStore()
-
   return (
-    <header className="bg-[rgb(var(--color-foreground))] border-b border-[rgb(var(--color-border))] shadow-md">
+    <header className="bg-foreground border-b border-border shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-8 h-8 portal-loader"></div>
-            <h1 className="text-2xl font-bold glitch-text text-[rgb(var(--color-primary))]">
+            <h1 className="text-2xl font-bold font-orbitron glitch-text text-primary group-hover:text-secondary transition-colors duration-300">
               Rick & Morty
             </h1>
           </Link>
@@ -21,15 +18,7 @@ export const Header: React.FC = () => {
           <Navigation />
           
           <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTheme}
-              className="p-2"
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-            >
-              {theme === 'light' ? '🌙' : '☀️'}
-            </Button>
+            <ThemeToggle />
           </div>
         </div>
       </div>
