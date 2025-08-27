@@ -276,3 +276,117 @@ body {
 .dimension-orange {
   color: rgb(var(--color-orange));
 }
+
+/* Loading Animations */
+@keyframes skeleton-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-portal {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton-wave {
+  background: linear-gradient(90deg, transparent, rgba(151, 206, 76, 0.1), transparent);
+  background-size: 200px 100%;
+  animation: skeleton-wave 1.5s infinite;
+}
+
+.skeleton-portal {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-border)) 25%,
+    rgba(151, 206, 76, 0.1) 50%,
+    rgb(var(--color-border)) 75%
+  );
+  background-size: 200px 100%;
+  animation: skeleton-portal 1.5s infinite;
+}
+
+/* Loading States */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.loading-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--color-border));
+}
+
+.loading-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(151, 206, 76, 0.2),
+    rgba(0, 212, 255, 0.1),
+    transparent
+  );
+  animation: loading-shimmer 2s infinite;
+  content: '';
+}
+
+@keyframes loading-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Portal Loading Effects */
+.portal-loading {
+  position: relative;
+  background: radial-gradient(
+    circle,
+    rgba(151, 206, 76, 0.1) 0%,
+    rgba(0, 212, 255, 0.05) 50%,
+    transparent 100%
+  );
+}
+
+.portal-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(151, 206, 76, 0.3) 60deg,
+    rgba(0, 212, 255, 0.2) 120deg,
+    rgba(240, 225, 74, 0.1) 180deg,
+    transparent 240deg,
+    rgba(155, 89, 182, 0.1) 300deg,
+    transparent 360deg
+  );
+  animation: portal-loading-spin 3s linear infinite;
+  border-radius: inherit;
+}
+
+@keyframes portal-loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,7 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { CharacterCard } from './CharacterCard'
-import { PortalLoader } from '../common/UI/PortalLoader'
+import { CharacterCardSkeleton } from './CharacterCardSkeleton'
+import { Loader } from '../common/UI/Loader'
 import type { Character } from '../../types/character'
 
 interface CharacterListProps {
@@ -17,11 +18,12 @@ export const CharacterList: React.FC<CharacterListProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <PortalLoader size="lg" />
-        <p className="mt-4 text-[rgb(var(--color-text-secondary))]">
-          Loading characters from the multiverse...
-        </p>
+      <div className="space-y-6">
+        <div className="loading-grid">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <CharacterCardSkeleton key={index} index={index} />
+          ))}
+        </div>
       </div>
     )
   }
@@ -30,10 +32,10 @@ export const CharacterList: React.FC<CharacterListProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <div className="text-6xl mb-4">🛸</div>
-        <h3 className="text-xl font-semibold text-[rgb(var(--color-text))] mb-2">
+        <h3 className="text-xl font-semibold text-text mb-2">
           Portal Malfunction!
         </h3>
-        <p className="text-[rgb(var(--color-text-secondary))] text-center max-w-md">
+        <p className="text-textSecondary text-center max-w-md">
           {error}
         </p>
       </div>
@@ -44,10 +46,10 @@ export const CharacterList: React.FC<CharacterListProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <div className="text-6xl mb-4">🔍</div>
-        <h3 className="text-xl font-semibold text-[rgb(var(--color-text))] mb-2">
+        <h3 className="text-xl font-semibold text-text mb-2">
           No Characters Found
         </h3>
-        <p className="text-[rgb(var(--color-text-secondary))] text-center max-w-md">
+        <p className="text-textSecondary text-center max-w-md">
           Try adjusting your filters to discover characters from other dimensions.
         </p>
       </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { EpisodeCard } from './EpisodeCard'
-import { PortalLoader } from '../common/UI/PortalLoader'
+import { EpisodeCardSkeleton } from './EpisodeCardSkeleton'
 import type { Episode } from '../../types/episode'
 
 interface EpisodeListProps {
@@ -17,11 +17,10 @@ export const EpisodeList: React.FC<EpisodeListProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <PortalLoader size="lg" />
-        <p className="mt-4 text-[rgb(var(--color-text-secondary))]">
-          Loading episodes from across dimensions...
-        </p>
+      <div className="space-y-4">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <EpisodeCardSkeleton key={index} index={index} />
+        ))}
       </div>
     )
   }

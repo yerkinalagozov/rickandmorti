@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { LocationCard } from './LocationCard'
-import { PortalLoader } from '../common/UI/PortalLoader'
+import { LocationCardSkeleton } from './LocationCardSkeleton'
 import type { Location } from '../../types/location'
 
 interface LocationListProps {
@@ -17,11 +17,10 @@ export const LocationList: React.FC<LocationListProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <PortalLoader size="lg" />
-        <p className="mt-4 text-[rgb(var(--color-text-secondary))]">
-          Scanning dimensions and realities...
-        </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <LocationCardSkeleton key={index} index={index} />
+        ))}
       </div>
     )
   }

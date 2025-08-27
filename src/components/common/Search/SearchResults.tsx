@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Card } from '../UI/Card'
-import { PortalLoader } from '../UI/PortalLoader'
+import { SearchLoader } from '../../search/SearchLoader'
 import type { SearchEntity } from './SearchFilters'
 import type { Character } from '../../../types/character'
 import type { Episode } from '../../../types/episode'
@@ -28,14 +28,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   const navigate = useNavigate()
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <PortalLoader size="lg" />
-        <p className="mt-4 text-[rgb(var(--color-text-secondary))]">
-          Searching across infinite dimensions...
-        </p>
-      </div>
-    )
+    return <SearchLoader query={query} type={entity} />
   }
 
   if (error) {
